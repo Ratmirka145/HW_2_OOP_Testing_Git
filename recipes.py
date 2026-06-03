@@ -73,3 +73,28 @@ class Recipe:
             result = result + str(ingredient) + "\n"
 
         return result
+    
+class DietaryRecipe(Recipe):
+    def __init__(self,title, diet_type,ingredients=None):
+        if ingredients is None:
+            ingredients=[]
+
+        super().__init__(title,ingredients)
+        self.diet_type=diet_type
+
+    def scale(self, ratio):
+        if not Recipe.is_valid_ratio(ratio):
+            raise ValueError("Коэффициент должен быть положительным")
+        new_ingredients=[]
+
+        for ingredient in self.ingredients:
+            new_ingredient = Ingredient(ingredient.name, ingredient.quantity*ratio, ingredient.unit)
+            new_ingredients.append(new_ingredient)
+        return DietaryRecipe(self.title, self.diet_type, new_ingredients)
+
+    def __str__(self):
+        result = "["+self.diet_type+"] "+self.title+"\n"
+        for ingredient in self.ingredients:
+            result=result+str(ingredient)+"\n"
+
+        return result
